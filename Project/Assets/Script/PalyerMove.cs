@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Cinemachine;
 using Cinemachine.Utility;
+using UnityEngine.UI;
 
 public class PalyerMove : MonoBehaviour
 {
@@ -19,17 +20,26 @@ public class PalyerMove : MonoBehaviour
 
     public CinemachineSwitcher CS;
 
+    public int maxHp = 100;
+
+    public Slider hpslider;
+
     private CinemachinePOV pov;
 
     private CharacterController controller;
 
     private Vector3 velocity;
 
+    private int currentHP;
+
     public bool isGrounded;
     void Start()
     {
         controller = GetComponent<CharacterController>();
         pov = virtualCam.GetCinemachineComponent<CinemachinePOV>();
+
+        currentHP = maxHp;
+        hpslider.value = 1f;
     }
 
     // Update is called once per frame
@@ -77,6 +87,25 @@ public class PalyerMove : MonoBehaviour
             virtualCam.m_Lens.FieldOfView = 60f;
         }
 
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            pov.m_HorizontalAxis.Value = transform.eulerAngles.y;
+            pov.m_VerticalAxis.Value = 0f;
+        }
+    }
 
+    public void TakeDamage(int damageAmount)
+    {
+        currentHP -= damageAmount;
+        hpslider.value = (float)currentHP / maxHp;
+        if (currentHP <= 0)
+        {
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        Destroy(gameObject);
     }
 }
