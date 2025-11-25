@@ -90,7 +90,7 @@ public class NoiseVoxel : MonoBehaviour
         go.name = $"Grass_{x}_{y}_{z}";
 
         var b = go.GetComponent<Block>() ?? go.AddComponent<Block>();
-        b.type = BlockType.Dirt;
+        b.type = BlockType.Grass;
         b.maxHP = 3;
         b.dropCount = 1;
         b.mineable = true;
@@ -101,9 +101,25 @@ public class NoiseVoxel : MonoBehaviour
         go.name = $"Water_{x}_{y}_{z}";
 
         var b = go.GetComponent<Block>() ?? go.AddComponent<Block>();
-        b.type = BlockType.Dirt;
+        b.type = BlockType.Water;
         b.maxHP = 3;
         b.dropCount = 1;
         b.mineable = true;
+    }
+
+    public void PlaceTile(Vector3Int pos, BlockType type)
+    {
+        switch (type)
+        {
+            case BlockType.Dirt:
+                Place(pos.x, pos.y, pos.z);
+                break;
+            case BlockType.Grass:
+                PlaceGrass(pos.x, pos.y, pos.z);
+                break;
+            case BlockType.Water:
+                PlaceWater(pos.x, pos.y, pos.z);
+                break;
+        }
     }
 }
